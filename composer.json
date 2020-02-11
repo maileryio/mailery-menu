@@ -18,7 +18,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.4"
+        "php": "^7.4",
+        "yiisoft/html": "^3.0@dev",
+        "yiisoft/widget": "^3.0@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
