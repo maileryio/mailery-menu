@@ -5,8 +5,7 @@
     "keywords": [
         "mail",
         "mailer",
-        "menu",
-        "yii"
+        "menu"
     ],
     "homepage": "https://github.com/maileryio/mailery-menu",
     "license": "BSD-3-Clause",
