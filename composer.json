@@ -1,16 +1,19 @@
 {
-    "name": "maileryio/_____",
+    "name": "maileryio/mailery-menu",
     "type": "library",
-    "description": "_____",
+    "description": "Mailery Menu module",
     "keywords": [
-        "_____"
+        "mail",
+        "mailer",
+        "menu",
+        "yii"
     ],
-    "homepage": "https://github.com/maileryio/_____",
+    "homepage": "https://github.com/maileryio/mailery-menu",
     "license": "BSD-3-Clause",
     "support": {
-        "source": "https://github.com/maileryio/_____",
-        "issues": "https://github.com/maileryio/_____/issues",
-        "wiki": "https://github.com/maileryio/_____/wiki"
+        "source": "https://github.com/maileryio/mailery-menu",
+        "issues": "https://github.com/maileryio/mailery-menu/issues",
+        "wiki": "https://github.com/maileryio/mailery-menu/wiki"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -24,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Mailery\\_____\\": "src"
+            "Mailery\\Menu\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mailery\\_____\\Tests\\": "tests"
+            "Mailery\\Menu\\Tests\\": "tests"
         }
     },
     "scripts": {
