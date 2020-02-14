@@ -5,7 +5,8 @@
     "keywords": [
         "mail",
         "mailer",
-        "menu"
+        "menu",
+        "yii"
     ],
     "homepage": "https://github.com/maileryio/mailery-menu",
     "license": "BSD-3-Clause",
@@ -22,10 +23,9 @@
         "yiisoft/widget": "^3.0@dev"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.16",
-        "hiqdev/composer-config-plugin": "^1.0",
+        "phpunit/phpunit": "^9.0",
         "phan/phan": "^2.4",
-        "phpunit/phpunit": "^9.0"
+        "friendsofphp/php-cs-fixer": "^2.16"
     },
     "autoload": {
         "psr-4": {
@@ -45,11 +45,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
-        },
-        "config-plugin": {
-            "web": [
-                "config/web.php"
-            ]
         }
     },
     "config": {
