@@ -45,6 +45,9 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
+        },
+        "config-plugin": {
+            "backend": "config/backend.php"
         }
     },
     "config": {
