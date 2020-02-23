@@ -17,20 +17,15 @@ interface MenuInterface
     /**
      * @return string
      */
-    public function getKey(): string;
-
-    /**
-     * @return string
-     */
     public function getLabel(): string;
 
     /**
-     * @param array $items
+     * @param MenuItem[] $items
      */
     public function setItems(array $items);
 
     /**
-     * @return array
+     * @return MenuItem[]
      */
     public function getItems(): array;
 }

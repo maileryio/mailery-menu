@@ -12,34 +12,14 @@ declare(strict_types=1);
 
 namespace Mailery\Menu;
 
-use Closure;
 use Psr\Container\ContainerInterface;
 
 abstract class BaseMenu implements MenuInterface
 {
     /**
-     * @var array
+     * @var MenuItem[]
      */
     private $items = [];
-
-    /**
-     * @var array
-     */
-    private $allowedItemKeys = [
-        'label',
-        'title',
-        'encode',
-        'url',
-        'visible',
-        'active',
-        'template',
-        'submenuTemplate',
-        'options',
-        'icon',
-        'order',
-        'activeRoutes',
-        'items',
-    ];
 
     /**
      * @var ContainerInterface
@@ -67,21 +47,26 @@ abstract class BaseMenu implements MenuInterface
      */
     public function getItems(): array
     {
-        return $this->sortItems($this->filterItems($this->items));
+        return $this->sortItems($this->processItems($this->items));
     }
 
     /**
-     * @param array $items
-     * @return array
+     * @param MenuItem[] $items
+     * @return MenuItem[]
      */
-    private function filterItems(array $items): array
+    private function processItems(array $items): array
     {
         return array_map(
-            function ($item) {
-                $item = $this->filterItem($item);
+            function (MenuItem $item) {
+                $item = $item->withContainer($this->container);
 
-                if (!empty($item['items'])) {
-                    $item['items'] = $this->filterItems($item['items']);
+                $childItems = $item->getChildItems();
+                if (!empty($childItems)) {
+                    return $item->withChildItems(
+                        $this->sortItems(
+                            $this->processItems($childItems)
+                        )
+                    );
                 }
 
                 return $item;
@@ -91,30 +76,15 @@ abstract class BaseMenu implements MenuInterface
     }
 
     /**
-     * @param array $item
-     * @return array
-     */
-    private function filterItem(array $item): array
-    {
-        foreach ($item as $key => $value) {
-            if ($value instanceof Closure) {
-                $item[$key] = call_user_func($value, $this->container, $this);
-            }
-        }
-
-        return array_intersect_key($item, array_flip($this->allowedItemKeys));
-    }
-
-    /**
-     * @param array $items
-     * @return array
+     * @param MenuItem[] $items
+     * @return MenuItem[]
      */
     private function sortItems(array $items): array
     {
         usort(
             $items,
-            function ($a, $b) {
-                return @$a['order'] < @$b['order'] ? -1 : 1;
+            function (MenuItem $a, MenuItem $b) {
+                return $a->getOrder() < $b->getOrder() ? -1 : 1;
             }
         );
 
