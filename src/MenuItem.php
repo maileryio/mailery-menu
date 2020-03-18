@@ -145,6 +145,16 @@ class MenuItem
     }
 
     /**
+     * @param array $childItems
+     * @return self
+     */
+    public function setChildItems(array $childItems): self
+    {
+        $this->childItems = $childItems;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array

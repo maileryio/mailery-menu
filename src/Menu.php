@@ -14,7 +14,7 @@ namespace Mailery\Menu;
 
 use Psr\Container\ContainerInterface;
 
-abstract class BaseMenu implements MenuInterface
+class Menu implements MenuInterface
 {
     /**
      * @var MenuItem[]
