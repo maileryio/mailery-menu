@@ -5,6 +5,7 @@ namespace Mailery\Menu;
 use Psr\Container\ContainerInterface;
 use Opis\Closure\SerializableClosure;
 use Yiisoft\Injector\Injector;
+use Yiisoft\Router\UrlMatcherInterface;
 
 class MenuItem
 {
@@ -37,6 +38,11 @@ class MenuItem
      * @var ContainerInterface
      */
     private ContainerInterface $container;
+
+    /**
+     * @var array
+     */
+    private array $activeRouteNames = [];
 
     /**
      * @param string|\Closure $url
@@ -105,6 +111,35 @@ class MenuItem
     }
 
     /**
+     * @param array $activeRouteNames
+     * @return \self
+     */
+    public function withActiveRouteNames(array $activeRouteNames): self
+    {
+        $new = clone $this;
+        $new->activeRouteNames = $activeRouteNames;
+        return $new;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getActive(): ?bool
+    {
+        if (empty($this->activeRouteNames)) {
+            return null;
+        }
+
+        /* @var $urlMatcher UrlMatcherInterface */
+        $urlMatcher = $this->container->get(UrlMatcherInterface::class);
+
+        return in_array(
+            $urlMatcher->getCurrentRoute()->getName(),
+            $this->activeRouteNames
+        );
+    }
+
+    /**
      * @return string|null
      */
     public function getUrl(): ?string
@@ -164,6 +199,7 @@ class MenuItem
             'label' => $this->getLabel(),
             'icon' => $this->getIcon(),
             'order' => $this->getOrder(),
+            'active' => $this->getActive(),
             'childItems' => $this->getChildItems(),
         ];
     }
@@ -175,7 +211,7 @@ class MenuItem
     private function tryClosureValue($value)
     {
         if ($value instanceof SerializableClosure) {
-            $value = $this->url->getClosure();
+            $value = $value->getClosure();
         }
 
         if ($value instanceof \Closure) {
