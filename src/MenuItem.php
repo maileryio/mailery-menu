@@ -1,21 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * Mailery Menu module
+ * @link      https://github.com/maileryio/mailery-menu
+ * @package   Mailery\Menu
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2020, Mailery (https://mailery.io/)
+ */
+
 namespace Mailery\Menu;
 
-use Psr\Container\ContainerInterface;
 use Opis\Closure\SerializableClosure;
+use Psr\Container\ContainerInterface;
 use Yiisoft\Injector\Injector;
 use Yiisoft\Router\UrlMatcherInterface;
 
 class MenuItem
 {
     /**
-     * @var string|\Closure|null
+     * @var \Closure|string|null
      */
     private $url = null;
 
     /**
-     * @var string|\Closure|null
+     * @var \Closure|string|null
      */
     private $label = null;
 
@@ -45,24 +55,26 @@ class MenuItem
     private array $activeRouteNames = [];
 
     /**
-     * @param string|\Closure $url
+     * @param \Closure|string $url
      * @return self
      */
     public function withUrl($url): self
     {
         $new = clone $this;
         $new->url = $url;
+
         return $new;
     }
 
     /**
-     * @param string|\Closure $label
+     * @param \Closure|string $label
      * @return self
      */
     public function withLabel($label): self
     {
         $new = clone $this;
         $new->label = $label;
+
         return $new;
     }
 
@@ -74,6 +86,7 @@ class MenuItem
     {
         $new = clone $this;
         $new->icon = $icon;
+
         return $new;
     }
 
@@ -85,6 +98,7 @@ class MenuItem
     {
         $new = clone $this;
         $new->order = $order;
+
         return $new;
     }
 
@@ -96,6 +110,7 @@ class MenuItem
     {
         $new = clone $this;
         $new->childItems = $childItems;
+
         return $new;
     }
 
@@ -107,17 +122,19 @@ class MenuItem
     {
         $new = clone $this;
         $new->container = $container;
+
         return $new;
     }
 
     /**
      * @param array $activeRouteNames
-     * @return \self
+     * @return self
      */
     public function withActiveRouteNames(array $activeRouteNames): self
     {
         $new = clone $this;
         $new->activeRouteNames = $activeRouteNames;
+
         return $new;
     }
 
@@ -135,7 +152,7 @@ class MenuItem
 
         return in_array(
             $urlMatcher->getCurrentRoute()->getName(),
-            $this->activeRouteNames
+            $this->activeRouteNames, true
         );
     }
 
@@ -186,6 +203,7 @@ class MenuItem
     public function setChildItems(array $childItems): self
     {
         $this->childItems = $childItems;
+
         return $this;
     }
 
@@ -220,5 +238,4 @@ class MenuItem
 
         return $value;
     }
-
 }

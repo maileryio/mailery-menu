@@ -19,7 +19,10 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.4",
+        "opis/closure": "^3.5",
         "yiisoft/html": "^3.0@dev",
+        "yiisoft/injector": "^3.0@dev",
+        "yiisoft/router": "^3.0@dev",
         "yiisoft/widget": "^3.0@dev"
     },
     "require-dev": {
