@@ -19,6 +19,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.4",
+        "foxy/foxy": "^1.0",
         "opis/closure": "^3.5",
         "yiisoft/html": "^3.0@dev",
         "yiisoft/injector": "^3.0@dev",
