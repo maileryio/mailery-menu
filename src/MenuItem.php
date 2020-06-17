@@ -45,9 +45,9 @@ class MenuItem
     private array $childItems = [];
 
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|null
      */
-    private ContainerInterface $container;
+    private ?ContainerInterface $container = null;
 
     /**
      * @var array
