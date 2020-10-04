@@ -210,6 +210,14 @@ class MenuItem
     /**
      * @return array
      */
+    public function getActiveRouteNames(): array
+    {
+        return $this->activeRouteNames;
+    }
+
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
         return [
