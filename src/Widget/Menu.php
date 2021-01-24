@@ -162,7 +162,7 @@ class Menu extends Widget
      *
      * @return string the result of Widget execution to be outputted.
      */
-    public function render(): string
+    public function run(): string
     {
         $items = $this->normalizeItems($this->items, $hasActiveChild);
 
