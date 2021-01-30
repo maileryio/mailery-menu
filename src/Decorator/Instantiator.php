@@ -3,9 +3,24 @@
 namespace Mailery\Menu\Decorator;
 
 use Mailery\Menu\MenuItem;
+use Yiisoft\Injector\Injector;
+use Yiisoft\Router\UrlMatcherInterface;
 
-class Instantiator
+final class Instantiator
 {
+    /**
+     * @var Injector
+     */
+    private Injector $injector;
+
+    /**
+     * @param Injector $injector
+     */
+    public function __construct(Injector $injector)
+    {
+        $this->injector = $injector;
+    }
+
     /**
      * @param array $items
      * @return array
@@ -27,7 +42,10 @@ class Instantiator
                     $item['items'] = $this->processItems($item['items']);
                 }
 
-                return MenuItem::fromArray($item);
+                return $this->injector->invoke(function (UrlMatcherInterface $urlMatcher) use($item) {
+                    return MenuItem::fromArray($item)
+                        ->withUrlMatcher($urlMatcher);
+                });
             },
             $items
         );

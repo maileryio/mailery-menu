@@ -4,7 +4,7 @@ namespace Mailery\Menu\Decorator;
 
 use Mailery\Menu\MenuItem;
 
-class Sorter
+final class Sorter
 {
     /**
      * @param array $items

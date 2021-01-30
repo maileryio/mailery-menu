@@ -4,7 +4,7 @@ namespace Mailery\Menu\Decorator;
 
 use Yiisoft\Injector\Injector;
 
-class Normalizer
+final class Normalizer
 {
     /**
      * @var Injector

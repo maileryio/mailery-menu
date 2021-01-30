@@ -16,7 +16,7 @@ use Mailery\Menu\Decorator\Normalizer;
 use Mailery\Menu\Decorator\Instantiator;
 use Mailery\Menu\Decorator\Sorter;
 
-class Menu implements MenuInterface
+final class Menu implements MenuInterface
 {
     /**
      * @var Sorter

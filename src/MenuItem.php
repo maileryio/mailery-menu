@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace Mailery\Menu;
 
-class MenuItem
+use Yiisoft\Router\UrlMatcherInterface;
+
+final class MenuItem
 {
     /**
      * @var string|null
@@ -45,6 +47,19 @@ class MenuItem
     private array $activeRouteNames = [];
 
     /**
+     * @var UrlMatcherInterface
+     */
+    private UrlMatcherInterface $urlMatcher;
+
+    public function withUrlMatcher(UrlMatcherInterface $urlMatcher)
+    {
+        $new = clone $this;
+        $new->urlMatcher = $urlMatcher;
+
+        return $new;
+    }
+
+    /**
      * @return bool|null
      */
     public function getActive(): ?bool
@@ -52,12 +67,9 @@ class MenuItem
         if (empty($this->activeRouteNames)) {
             return null;
         }
-return null;
-        /* @var $urlMatcher UrlMatcherInterface */
-        $urlMatcher = $this->container->get(UrlMatcherInterface::class);
 
         return in_array(
-            $urlMatcher->getCurrentRoute()->getName(),
+            $this->urlMatcher->getCurrentRoute()->getName(),
             $this->activeRouteNames,
             true
         );
