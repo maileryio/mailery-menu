@@ -12,22 +12,17 @@ declare(strict_types=1);
 
 namespace Mailery\Menu;
 
-use Opis\Closure\SerializableClosure;
-use Psr\Container\ContainerInterface;
-use Yiisoft\Injector\Injector;
-use Yiisoft\Router\UrlMatcherInterface;
-
 class MenuItem
 {
     /**
-     * @var \Closure|string|null
+     * @var string|null
      */
-    private $url = null;
+    private ?string $url = null;
 
     /**
-     * @var \Closure|string|null
+     * @var string|null
      */
-    private $label = null;
+    private ?string $label = null;
 
     /**
      * @var string|null
@@ -42,101 +37,12 @@ class MenuItem
     /**
      * @var MenuItem[]
      */
-    private array $childItems = [];
-
-    /**
-     * @var ContainerInterface|null
-     */
-    private ?ContainerInterface $container = null;
+    private array $items = [];
 
     /**
      * @var array
      */
     private array $activeRouteNames = [];
-
-    /**
-     * @param \Closure|string $url
-     * @return self
-     */
-    public function withUrl($url): self
-    {
-        $new = clone $this;
-        $new->url = $url;
-
-        return $new;
-    }
-
-    /**
-     * @param \Closure|string $label
-     * @return self
-     */
-    public function withLabel($label): self
-    {
-        $new = clone $this;
-        $new->label = $label;
-
-        return $new;
-    }
-
-    /**
-     * @param string $icon
-     * @return self
-     */
-    public function withIcon(string $icon): self
-    {
-        $new = clone $this;
-        $new->icon = $icon;
-
-        return $new;
-    }
-
-    /**
-     * @param int $order
-     * @return self
-     */
-    public function withOrder(int $order): self
-    {
-        $new = clone $this;
-        $new->order = $order;
-
-        return $new;
-    }
-
-    /**
-     * @param MenuItem[] $childItems
-     * @return self
-     */
-    public function withChildItems(array $childItems): self
-    {
-        $new = clone $this;
-        $new->childItems = $childItems;
-
-        return $new;
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @return self
-     */
-    public function withContainer(ContainerInterface $container): self
-    {
-        $new = clone $this;
-        $new->container = $container;
-
-        return $new;
-    }
-
-    /**
-     * @param array $activeRouteNames
-     * @return self
-     */
-    public function withActiveRouteNames(array $activeRouteNames): self
-    {
-        $new = clone $this;
-        $new->activeRouteNames = $activeRouteNames;
-
-        return $new;
-    }
 
     /**
      * @return bool|null
@@ -146,13 +52,14 @@ class MenuItem
         if (empty($this->activeRouteNames)) {
             return null;
         }
-
+return null;
         /* @var $urlMatcher UrlMatcherInterface */
         $urlMatcher = $this->container->get(UrlMatcherInterface::class);
 
         return in_array(
             $urlMatcher->getCurrentRoute()->getName(),
-            $this->activeRouteNames, true
+            $this->activeRouteNames,
+            true
         );
     }
 
@@ -161,7 +68,18 @@ class MenuItem
      */
     public function getUrl(): ?string
     {
-        return $this->tryClosureValue($this->url);
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     * @return self
+     */
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
     }
 
     /**
@@ -169,7 +87,18 @@ class MenuItem
      */
     public function getLabel(): ?string
     {
-        return $this->tryClosureValue($this->label);
+        return $this->label;
+    }
+
+    /**
+     * @param string $label
+     * @return self
+     */
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+
+        return $this;
     }
 
     /**
@@ -181,6 +110,17 @@ class MenuItem
     }
 
     /**
+     * @param string $icon
+     * @return self
+     */
+    public function setIcon(string $icon): self
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getOrder(): int
@@ -189,20 +129,31 @@ class MenuItem
     }
 
     /**
-     * @return MenuItem[]
+     * @param int $order
+     * @return self
      */
-    public function getChildItems(): array
+    public function setOrder(int $order): self
     {
-        return $this->childItems;
+        $this->order = $order;
+
+        return $this;
     }
 
     /**
-     * @param array $childItems
+     * @return MenuItem[]
+     */
+    public function getItems(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param array $items
      * @return self
      */
-    public function setChildItems(array $childItems): self
+    public function setItems(array $items): self
     {
-        $this->childItems = $childItems;
+        $this->items = $items;
 
         return $this;
     }
@@ -216,34 +167,49 @@ class MenuItem
     }
 
     /**
+     * @param array $activeRouteNames
+     * @return self
+     */
+    public function setActiveRouteNames(array $activeRouteNames): self
+    {
+        $this->activeRouteNames = $activeRouteNames;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
     {
         return [
-            'url' => $this->getUrl(),
+            'url' => $this->getUrl() ?? '#',
             'label' => $this->getLabel(),
             'icon' => $this->getIcon(),
             'order' => $this->getOrder(),
             'active' => $this->getActive(),
-            'childItems' => $this->getChildItems(),
+            'items' => array_map(
+                fn ($item) => $item->toArray(),
+                $this->getItems()
+            ),
         ];
     }
 
     /**
-     * @param mixed $value
-     * @return mixed
+     * @param array $values
+     * @return self
      */
-    private function tryClosureValue($value)
+    public static function fromArray(array $values): self
     {
-        if ($value instanceof SerializableClosure) {
-            $value = $value->getClosure();
+        $object = new MenuItem();
+
+        foreach ($values as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            if (method_exists($object, $setter)) {
+                $object->$setter($value);
+            }
         }
 
-        if ($value instanceof \Closure) {
-            return (new Injector($this->container))->invoke($value, [$this]);
-        }
-
-        return $value;
+        return $object;
     }
 }

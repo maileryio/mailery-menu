@@ -15,11 +15,6 @@ namespace Mailery\Menu;
 interface MenuInterface
 {
     /**
-     * @param MenuItem[] $items
-     */
-    public function setItems(array $items);
-
-    /**
      * @return MenuItem[]
      */
     public function getItems(): array;

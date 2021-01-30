@@ -12,34 +12,74 @@ declare(strict_types=1);
 
 namespace Mailery\Menu;
 
-use Psr\Container\ContainerInterface;
+use Mailery\Menu\Decorator\Normalizer;
+use Mailery\Menu\Decorator\Instantiator;
+use Mailery\Menu\Decorator\Sorter;
 
 class Menu implements MenuInterface
 {
     /**
-     * @var MenuItem[]
+     * @var Sorter
      */
-    private $items = [];
+    private Sorter $sorter;
 
     /**
-     * @var ContainerInterface
+     * @var Normalizer
      */
-    private $container;
+    private Normalizer $normalizer;
 
     /**
-     * @param ContainerInterface $container
+     * @var Instantiator
      */
-    public function __construct(ContainerInterface $container)
+    private Instantiator $instantiator;
+
+    /**
+     * @var array
+     */
+    private array $items;
+
+    /**
+     * @param array $items
+     */
+    public function __construct(array $items)
     {
-        $this->container = $container;
+        $this->items = $items;
     }
 
     /**
-     * {@inheritdoc}
+     * @param Sorter $sorter
+     * @return self
      */
-    public function setItems(array $items)
+    public function withSorter(Sorter $sorter): self
     {
-        $this->items = $items;
+        $new = clone $this;
+        $new->sorter = $sorter;
+
+        return $new;
+    }
+
+    /**
+     * @param Normalizer $normalizer
+     * @return self
+     */
+    public function withNormalizer(Normalizer $normalizer): self
+    {
+        $new = clone $this;
+        $new->normalizer = $normalizer;
+
+        return $new;
+    }
+
+    /**
+     * @param Instantiator $instantiator
+     * @return self
+     */
+    public function withInstantiator(Instantiator $instantiator): self
+    {
+        $new = clone $this;
+        $new->instantiator = $instantiator;
+
+        return $new;
     }
 
     /**
@@ -47,47 +87,12 @@ class Menu implements MenuInterface
      */
     public function getItems(): array
     {
-        return $this->sortItems($this->processItems($this->items));
-    }
-
-    /**
-     * @param MenuItem[] $items
-     * @return MenuItem[]
-     */
-    private function processItems(array $items): array
-    {
-        return array_map(
-            function (MenuItem $item) {
-                $item = $item->withContainer($this->container);
-
-                $childItems = $item->getChildItems();
-                if (!empty($childItems)) {
-                    return $item->withChildItems(
-                        $this->sortItems(
-                            $this->processItems($childItems)
-                        )
-                    );
-                }
-
-                return $item;
-            },
-            $items
-        );
-    }
-
-    /**
-     * @param MenuItem[] $items
-     * @return MenuItem[]
-     */
-    private function sortItems(array $items): array
-    {
-        usort(
-            $items,
-            function (MenuItem $a, MenuItem $b) {
-                return $a->getOrder() < $b->getOrder() ? -1 : 1;
-            }
-        );
-
-        return $items;
+        return $this->instantiator
+            ->instantiate(
+                $this->normalizer
+                    ->normalize(
+                        $this->items
+                    )
+            );
     }
 }
