@@ -76,7 +76,9 @@ final class Menu extends Widget
      *
      * {@see \Yiisoft\Html\Html::renderTagAttributes() for details on how attributes are being rendered}
      */
-    private $itemOptions = [];
+    private $itemOptions = [
+        'encode' => false,
+    ];
 
     /**
      * @var string the template used to render the body of a menu which is a link. In this template, the token `{url}`
@@ -143,7 +145,9 @@ final class Menu extends Widget
      *
      * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    private $options = [];
+    private $options = [
+        'encode' => false,
+    ];
 
     /**
      * @var string the CSS class that will be assigned to the first item in the main menu or each submenu. Defaults to
@@ -297,7 +301,10 @@ final class Menu extends Widget
      */
     public function itemOptions(array $value): self
     {
-        $this->itemOptions = $value;
+        $this->itemOptions = ArrayHelper::merge(
+            $this->itemOptions,
+            $value
+        );
 
         return $this;
     }
@@ -353,7 +360,10 @@ final class Menu extends Widget
      */
     public function options(array $value): self
     {
-        $this->options = $value;
+        $this->options = ArrayHelper::merge(
+            $this->options,
+            $value
+        );
 
         return $this;
     }
