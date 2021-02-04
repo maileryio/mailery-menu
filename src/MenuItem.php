@@ -16,6 +16,8 @@ use Yiisoft\Router\UrlMatcherInterface;
 
 final class MenuItem
 {
+    const METHOD_POST = 'post';
+
     /**
      * @var string|null
      */
@@ -30,6 +32,11 @@ final class MenuItem
      * @var string|null
      */
     private ?string $icon = null;
+
+    /**
+     * @var string|null
+     */
+    private ?string $method = null;
 
     /**
      * @var int
@@ -133,6 +140,25 @@ final class MenuItem
     }
 
     /**
+     * @return string|null
+     */
+    public function getMethod(): ?string
+    {
+        return $this->method;
+    }
+
+    /**
+     * @param string $method
+     * @return self
+     */
+    public function setMethod(string $method): self
+    {
+        $this->method = $method;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getOrder(): int
@@ -200,6 +226,7 @@ final class MenuItem
             'icon' => $this->getIcon(),
             'order' => $this->getOrder(),
             'active' => $this->getActive(),
+            'method' => $this->getMethod(),
             'items' => array_map(
                 fn ($item) => $item->toArray(),
                 $this->getItems()
