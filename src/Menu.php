@@ -19,19 +19,19 @@ use Mailery\Menu\Decorator\Sorter;
 final class Menu implements MenuInterface
 {
     /**
-     * @var Sorter
+     * @var Sorter|null
      */
-    private Sorter $sorter;
+    private ?Sorter $sorter = null;
 
     /**
-     * @var Normalizer
+     * @var Normalizer|null
      */
-    private Normalizer $normalizer;
+    private ?Normalizer $normalizer = null;
 
     /**
-     * @var Instantiator
+     * @var Instantiator|null
      */
-    private Instantiator $instantiator;
+    private ?Instantiator $instantiator = null;
 
     /**
      * @var array
@@ -87,12 +87,20 @@ final class Menu implements MenuInterface
      */
     public function getItems(): array
     {
-        return $this->instantiator
-            ->instantiate(
-                $this->normalizer
-                    ->normalize(
-                        $this->items
-                    )
-            );
+        $items = $this->items;
+
+        if ($this->normalizer !== null) {
+            $items = $this->normalizer->normalize($items);
+        }
+
+        if ($this->instantiator !== null) {
+            $items = $this->instantiator->instantiate($items);
+        }
+
+        if ($this->sorter !== null) {
+            $items = $this->sorter->sort($items);
+        }
+
+        return $items;
     }
 }
