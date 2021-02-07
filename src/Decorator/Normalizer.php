@@ -48,7 +48,12 @@ final class Normalizer
 
                 return $item;
             },
-            $items
+            array_filter(
+                $items,
+                function (array $item) {
+                    return isset($item['label']);
+                }
+            )
         );
     }
 }
