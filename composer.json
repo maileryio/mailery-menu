@@ -21,7 +21,7 @@
         "php": "^7.4",
         "foxy/foxy": "^1.0",
         "opis/closure": "^3.5",
-        "yiisoft/html": "^3.0@dev",
+        "yiisoft/html": "^1.0",
         "yiisoft/injector": "^1.0",
         "yiisoft/router": "^3.0@dev",
         "yiisoft/widget": "^3.0@dev"
