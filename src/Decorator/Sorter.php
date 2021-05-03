@@ -28,6 +28,14 @@ final class Sorter
             }
         );
 
+        foreach ($items as $item) {
+            if ($item instanceof MenuItem) {
+                $item->setItems($this->processItems($item->getItems()));
+            } else {
+                $item['items'] = $this->processItems($item['items']);
+            }
+        }
+
         return $items;
     }
 
