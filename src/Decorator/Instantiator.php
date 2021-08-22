@@ -4,7 +4,7 @@ namespace Mailery\Menu\Decorator;
 
 use Mailery\Menu\MenuItem;
 use Yiisoft\Injector\Injector;
-use Yiisoft\Router\UrlMatcherInterface;
+use Yiisoft\Router\CurrentRoute;
 
 final class Instantiator
 {
@@ -42,9 +42,9 @@ final class Instantiator
                     $item['items'] = $this->processItems($item['items']);
                 }
 
-                return $this->injector->invoke(function (UrlMatcherInterface $urlMatcher) use($item) {
+                return $this->injector->invoke(function (CurrentRoute $currentRoute) use($item) {
                     return MenuItem::fromArray($item)
-                        ->withUrlMatcher($urlMatcher);
+                        ->withCurrentRoute($currentRoute);
                 });
             },
             $items

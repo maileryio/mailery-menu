@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Mailery\Menu;
 
-use Yiisoft\Router\UrlMatcherInterface;
+use Yiisoft\Router\CurrentRoute;
 
 final class MenuItem
 {
@@ -54,14 +54,14 @@ final class MenuItem
     private array $activeRouteNames = [];
 
     /**
-     * @var UrlMatcherInterface
+     * @var CurrentRoute
      */
-    private UrlMatcherInterface $urlMatcher;
+    private CurrentRoute $currentRoute;
 
-    public function withUrlMatcher(UrlMatcherInterface $urlMatcher)
+    public function withCurrentRoute(CurrentRoute $currentRoute)
     {
         $new = clone $this;
-        $new->urlMatcher = $urlMatcher;
+        $new->currentRoute = $currentRoute;
 
         return $new;
     }
@@ -76,7 +76,7 @@ final class MenuItem
         }
 
         return in_array(
-            $this->urlMatcher->getCurrentRoute()->getName(),
+            $this->currentRoute->getRoute()->getName(),
             $this->activeRouteNames,
             true
         );
