@@ -76,7 +76,7 @@ final class MenuItem
         }
 
         return in_array(
-            $this->currentRoute->getRoute()->getName(),
+            $this->currentRoute->getName(),
             $this->activeRouteNames,
             true
         );
